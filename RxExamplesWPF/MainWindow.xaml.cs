@@ -21,6 +21,8 @@ namespace RxExamplesWPF
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
+            if (!EnableLoggingCheckBox.IsChecked.GetValueOrDefault()) return;
+
             AddToLogBox("Click");
         }
 
@@ -33,6 +35,7 @@ namespace RxExamplesWPF
             _subject = new Subject<RoutedEventArgs>();
 
             _subject
+                .Where(e => EnableLoggingCheckBox.IsChecked.GetValueOrDefault())
                 .Select(e => "Subject Next")
                 .Subscribe(AddToLogBox);
         }

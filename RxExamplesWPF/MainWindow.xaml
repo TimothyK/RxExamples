@@ -9,6 +9,7 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto" />
         <Button x:Name="SubjectButton" Content="Subject" HorizontalAlignment="Left" Margin="47,144,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.467,-0.318" Click="SubjectButton_Click"/>
+        <CheckBox x:Name="EnableLoggingCheckBox" Content="Enable Logging" HorizontalAlignment="Left" Margin="47,41,0,0" VerticalAlignment="Top" IsChecked="True"/>
 
     </Grid>
 </Window>
