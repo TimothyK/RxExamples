@@ -21,8 +21,7 @@ namespace RxExamplesWPF
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            LogBox.Text += DateTime.Now.ToString("HH:mm:ss.fffffff") + " - Click\r\n";
-            LogBox.ScrollToEnd();
+            AddToLogBox("Click");
         }
 
         #region Subject
@@ -33,13 +32,9 @@ namespace RxExamplesWPF
         {
             _subject = new Subject<RoutedEventArgs>();
 
-            _subject.Subscribe(Subject_Next);
-        }
-
-        private void Subject_Next(RoutedEventArgs e)
-        {
-            LogBox.Text += DateTime.Now.ToString("HH:mm:ss.fffffff") + " - Next Subject\r\n";
-            LogBox.ScrollToEnd();
+            _subject
+                .Select(e => "Subject Next")
+                .Subscribe(AddToLogBox);
         }
 
         private void SubjectButton_Click(object sender, RoutedEventArgs e)
@@ -49,6 +44,11 @@ namespace RxExamplesWPF
 
         #endregion
 
+        private void AddToLogBox(string source)
+        {
+            LogBox.Text += DateTime.Now.ToString("HH:mm:ss.fffffff") + " - " + source + "\r\n";
+            LogBox.ScrollToEnd();
+        }
         
 
         
