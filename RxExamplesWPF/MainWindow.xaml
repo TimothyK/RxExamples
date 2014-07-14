@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button x:Name="Button1" Content="Button 1" HorizontalAlignment="Left" Margin="47,75,0,0" VerticalAlignment="Top" Width="75" 
+        <Button x:Name="Button1" Content="Click" HorizontalAlignment="Left" Margin="47,75,0,0" VerticalAlignment="Top" Width="100" 
                 Click="Button1_Click"/>
         <TextBox x:Name="LogBox" Margin="180,41,35,47" TextWrapping="Wrap"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        <Button x:Name="SubjectButton" Content="Subject" HorizontalAlignment="Left" Margin="47,144,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.467,-0.318" Click="SubjectButton_Click"/>
 
     </Grid>
 </Window>
