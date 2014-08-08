@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 
 namespace RxExamplesWPF
@@ -12,16 +13,54 @@ namespace RxExamplesWPF
     /// </summary>
     public partial class MainWindow
     {
-
-
+        
         public MainWindow()
         {
             InitializeComponent();
 
+            SubscribeToAll();
+        }
+
+        #region Subscription Management
+
+        private void SubscribeToAll()
+        {
             SubscribeToUnexpectedErrorStream();
             SubscribeToConnectionErrorStream();
             SubscribeToBadOrderStream();
         }
+
+        private void chkDelayTimesTen_OnChecked(object sender, RoutedEventArgs e)
+        {
+            Flush();
+        }
+
+        TimeSpan Interval(int valueInSeconds)
+        {
+            if (chkDelayTimesTen.IsChecked.GetValueOrDefault())
+                valueInSeconds = valueInSeconds*10;
+            return TimeSpan.FromSeconds(valueInSeconds);
+        }
+
+        private void btnFlush_Click(object sender, RoutedEventArgs e)
+        {
+            Flush();
+        }
+
+        private void Flush()
+        {
+            _unexpectedErrorStream.OnCompleted();
+            _connectionErrorStream.OnCompleted();
+            _badOrderErrorStream.OnCompleted();
+
+            _unexpectedErrorStream = new Subject<Exception>();
+            _connectionErrorStream = new Subject<Exception>();
+            _badOrderErrorStream = new Subject<BadOrderException>();
+
+            SubscribeToAll();
+        }
+
+        #endregion
 
         #region Logging
 
@@ -42,6 +81,8 @@ namespace RxExamplesWPF
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
+            Flush();
+            _stamp = 0;
             txtRawLogBox.Text = string.Empty;
             txtAggregatedLogBox.Text = string.Empty;
         }
@@ -50,7 +91,7 @@ namespace RxExamplesWPF
 
         #region Unexpected Error Notification
 
-        private readonly Subject<Exception> _unexpectedErrorStream = new Subject<Exception>();
+        private Subject<Exception> _unexpectedErrorStream = new Subject<Exception>();
         private IDisposable _unexpectedErrorSubscription;
 
         private void GroupOnErrorType_Checked(object sender, RoutedEventArgs e)
@@ -73,7 +114,7 @@ namespace RxExamplesWPF
         {
             _unexpectedErrorSubscription = _unexpectedErrorStream
                 .Do(ex => AddToRawLogBox(ex.Message))
-                .SampleResponsive(TimeSpan.FromSeconds(2))
+                .SampleResponsive(Interval(2))
                 .ObserveOnDispatcher()
                 .Subscribe(ex => AddToAggLogBox(ex.Message));
         }
@@ -86,19 +127,19 @@ namespace RxExamplesWPF
                 .GroupBy(ex => new {Type = ex.GetType(), ex.StackTrace})
                 .Subscribe(
                     g =>
-                        g.SampleResponsive(TimeSpan.FromSeconds(2))
+                        g.SampleResponsive(Interval(2))
                             .ObserveOnDispatcher()
                             .Subscribe(ex => AddToAggLogBox(ex.Message)));
         }
 
 
-        private void Timeout_Click(object sender, RoutedEventArgs e)
+        private void NullRef_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                throw new TimeoutException("Timed out waiting for server " + System.Threading.Interlocked.Increment(ref _stamp));
+                throw new NullReferenceException("Variable var" + System.Threading.Interlocked.Increment(ref _stamp) + " cannot be null");
             }
-            catch (TimeoutException ex)
+            catch (NullReferenceException ex)
             {
                 _unexpectedErrorStream.OnNext(ex);
             }            
@@ -121,15 +162,15 @@ namespace RxExamplesWPF
 
         #region Connection Error Notifications
 
-        private readonly Subject<Exception> _connectionErrorStream = new Subject<Exception>();
+        private Subject<Exception> _connectionErrorStream = new Subject<Exception>();
 
         private void SubscribeToConnectionErrorStream()
-        {            
+        {
             _connectionErrorStream
                 .Do(ex => IsConnected = false)
                 .Do(ex => AddToRawLogBox(ex.Message))
-                .Delay(TimeSpan.FromSeconds(3))
-                .SampleResponsive(TimeSpan.FromSeconds(2))
+                .Delay(Interval(3))
+                .SampleResponsive(Interval(2))
                 .Where(ex => !IsConnected)
                 .ObserveOnDispatcher()
                 .Subscribe(ex => AddToAggLogBox(ex.Message));
@@ -171,13 +212,13 @@ namespace RxExamplesWPF
 
         #region Bad Order Notifications
 
-        private readonly Subject<BadOrderException> _badOrderErrorStream = new Subject<BadOrderException>();
+        private Subject<BadOrderException> _badOrderErrorStream = new Subject<BadOrderException>();
 
         private void SubscribeToBadOrderStream()
         {
             _badOrderErrorStream
                 .Do(ex => AddToRawLogBox(ex.Message))
-                .Buffer(TimeSpan.FromSeconds(2))
+                .Buffer(Interval(2))
                 .Where(g => g.Any())
                 .ObserveOnDispatcher()
                 .Subscribe(g => AddToAggLogBox(BadOrdersMessage(g)));
