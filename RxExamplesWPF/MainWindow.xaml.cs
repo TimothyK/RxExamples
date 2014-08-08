@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 
 namespace RxExamplesWPF
@@ -72,10 +71,10 @@ namespace RxExamplesWPF
             txtRawLogBox.ScrollToEnd();
         }
 
-        private void AddToAggLogBox(string source)
+        private void AddToNotifyLogBox(string source)
         {
-            txtAggregatedLogBox.Text += DateTime.Now.ToString("HH:mm:ss.fffffff") + " - " + source + "\r\n";
-            txtAggregatedLogBox.ScrollToEnd();
+            txtNotificationLogBox.Text += DateTime.Now.ToString("HH:mm:ss.fffffff") + " - " + source + "\r\n";
+            txtNotificationLogBox.ScrollToEnd();
         }
 
 
@@ -84,7 +83,7 @@ namespace RxExamplesWPF
             Flush();
             _stamp = 0;
             txtRawLogBox.Text = string.Empty;
-            txtAggregatedLogBox.Text = string.Empty;
+            txtNotificationLogBox.Text = string.Empty;
         }
 
         #endregion
@@ -116,7 +115,7 @@ namespace RxExamplesWPF
                 .Do(ex => AddToRawLogBox(ex.Message))
                 .SampleResponsive(Interval(2))
                 .ObserveOnDispatcher()
-                .Subscribe(ex => AddToAggLogBox(ex.Message));
+                .Subscribe(ex => AddToNotifyLogBox(ex.Message));
         }
 
 
@@ -129,7 +128,7 @@ namespace RxExamplesWPF
                     g =>
                         g.SampleResponsive(Interval(2))
                             .ObserveOnDispatcher()
-                            .Subscribe(ex => AddToAggLogBox(ex.Message)));
+                            .Subscribe(ex => AddToNotifyLogBox(ex.Message)));
         }
 
 
@@ -173,7 +172,7 @@ namespace RxExamplesWPF
                 .SampleResponsive(Interval(2))
                 .Where(ex => !IsConnected)
                 .ObserveOnDispatcher()
-                .Subscribe(ex => AddToAggLogBox(ex.Message));
+                .Subscribe(ex => AddToNotifyLogBox(ex.Message));
         }
 
         private bool _isConnected;
@@ -221,7 +220,7 @@ namespace RxExamplesWPF
                 .Buffer(Interval(2))
                 .Where(g => g.Any())
                 .ObserveOnDispatcher()
-                .Subscribe(g => AddToAggLogBox(BadOrdersMessage(g)));
+                .Subscribe(g => AddToNotifyLogBox(BadOrdersMessage(g)));
         }
 
         private string BadOrdersMessage(IList<BadOrderException> exceptions)
