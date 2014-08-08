@@ -27,7 +27,7 @@
             <TextBox x:Name="txtRawLogBox" Margin="0,0,10,0" TextWrapping="Wrap"
     			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
     			ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Column="0" />
-            <TextBox x:Name="txtAggregatedLogBox" Margin="10,0,0,0" TextWrapping="Wrap"
+            <TextBox x:Name="txtNotificationLogBox" Margin="10,0,0,0" TextWrapping="Wrap"
     			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
     			ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Column="1" />
         </Grid>

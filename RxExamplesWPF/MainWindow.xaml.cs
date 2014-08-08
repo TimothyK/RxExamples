@@ -74,7 +74,7 @@ namespace RxExamplesWPF
         private void AddToNotifyLogBox(string source)
         {
             txtNotificationLogBox.Text += DateTime.Now.ToString("HH:mm:ss.fffffff") + " - " + source + "\r\n";
-            txtNotificationLogBox.ScrollToEnd();
+            txtNotificationLogBox.ScrollToEnd();            
         }
 
 
@@ -136,7 +136,7 @@ namespace RxExamplesWPF
         {
             try
             {
-                throw new NullReferenceException("Variable var" + System.Threading.Interlocked.Increment(ref _stamp) + " cannot be null");
+                throw new NullReferenceException("Variable var" + ++_stamp + " cannot be null");
             }
             catch (NullReferenceException ex)
             {
@@ -148,8 +148,7 @@ namespace RxExamplesWPF
         {
             try
             {
-                throw new DivideByZeroException("Couldn't divide " +
-                                                + System.Threading.Interlocked.Increment(ref _stamp) + " by zero");
+                throw new DivideByZeroException("Couldn't divide " + ++_stamp + " by zero");
             }
             catch (DivideByZeroException ex)
             {
@@ -194,7 +193,7 @@ namespace RxExamplesWPF
         {
             try
             {
-                throw new TimeoutException("Couldn't connect to server " + System.Threading.Interlocked.Increment(ref _stamp));
+                throw new TimeoutException("Couldn't connect to server " + ++_stamp);
             }
             catch (TimeoutException ex)
             {
@@ -235,7 +234,7 @@ namespace RxExamplesWPF
         {
             try
             {
-                throw new BadOrderException(System.Threading.Interlocked.Increment(ref _stamp));
+                throw new BadOrderException(++_stamp);
             }
             catch (BadOrderException ex)
             {
