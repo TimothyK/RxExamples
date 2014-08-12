@@ -68,7 +68,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="NotificationPatterns\INotificationPattern.cs" />
+    <Compile Include="NumberedException.cs" />
+    <Compile Include="NotificationPatterns\UnalteredStream.xaml.cs">
+      <DependentUpon>UnalteredStream.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RxExtensions.cs" />
+    <Compile Include="TimeSpanFactory.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,6 +87,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NotificationPatterns\UnalteredStream.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

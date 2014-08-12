@@ -31,6 +31,7 @@ namespace RxExamplesWPF
 
         private void chkDelayTimesTen_OnChecked(object sender, RoutedEventArgs e)
         {
+            TimeSpanFactory.Multiplier = chkDelayTimesTen.IsChecked.GetValueOrDefault() ? 10 : 1;
             Flush();
         }
 
