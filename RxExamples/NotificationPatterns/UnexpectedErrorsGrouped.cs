@@ -52,8 +52,9 @@ namespace RxExamples.NotificationPatterns
                 .Do(OnRawMessage)
                 .GroupBy(ex => ex, comparer)
                 .Subscribe(
-                    g =>
-                        g.SampleResponsive(TimeSpanFactory.FromSeconds(2))
+                    streamOfGivenType =>
+                        streamOfGivenType
+                            .SampleResponsive(TimeSpanFactory.FromSeconds(2))
                             .ObserveOn(this)
                             .Subscribe(OnNotificationMessage));
 
