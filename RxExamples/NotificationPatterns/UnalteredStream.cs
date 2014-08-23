@@ -32,16 +32,16 @@ namespace RxExamples.NotificationPatterns
         protected override IDisposable Subscribe()
         {
             _exceptionStream = new Subject<NumberedException>();
-
+            
             return _exceptionStream
-                .Do(OnRawMessage)
+                .Do((NumberedException ex) => OnRawMessage(ex.Message))
 
                 ////Manipulate event stream 
                 //.Where(ex => ex.ID % 2 == 1)
                 //.Delay(TimeSpanFactory.FromSeconds(2))
                 //.ObserveOn(this)
                 
-                .Subscribe(OnNotificationMessage);
+                .Subscribe((NumberedException ex) => OnNotificationMessage(ex.Message));
         }
         
     }
