@@ -72,6 +72,7 @@
     <Compile Include="NotificationPatterns\ConnectionErrors.Designer.cs">
       <DependentUpon>ConnectionErrors.cs</DependentUpon>
     </Compile>
+    <Compile Include="NotificationPatterns\ExceptionEqualityComparer.cs" />
     <Compile Include="NotificationPatterns\NotificationPattern.cs">
       <SubType>UserControl</SubType>
     </Compile>
